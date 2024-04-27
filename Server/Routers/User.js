@@ -20,11 +20,11 @@ router.post("/register", async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: hashPassword,
-            profile: { fullName: req.body.profile.fullName }
+            profile: { fullName: req.body.fullName }
 
         })
         await newUser.save()
-        res.status(200).json({ message: "New user added successfully." })
+        res.status(200).json({ status: 200, message: "New user added successfully." })
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -35,21 +35,21 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.body.username })
+        const user = await User.findOne({ email: req.body.email })
         if (!user) {
-            res.status(404).json({ message: "User not found" })
+            return res.status(404).json({ message: "User not found" })
         }
         const passwordMatch = await bcrypt.compare(req.body.password, user.password)
         if (!passwordMatch) {
-            res.status(401).json({ message: "Invalid Password." })
+            return res.status(401).json({ message: "Invalid Password." })
 
         }
         //! Generate JWT token
         const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET)
-        res.status(200).json({ token: token })
+        res.status(200).json({ status: 200, token: token })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 
 })

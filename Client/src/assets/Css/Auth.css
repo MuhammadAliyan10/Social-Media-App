@@ -1,0 +1,56 @@
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+
+.box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 32%;
+}
+
+.box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth__box {
+    width: 90%;
+    height: 20%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-size: 14px;
+}
+
+
+label {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.box button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.box button:hover {
+    background-color: #0056b3;
+}
+
+.errors span {
+    color: red;
+    font-size: 12px;
+}
