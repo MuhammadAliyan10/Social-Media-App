@@ -1,42 +1,44 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+b {
+  font-family: "Geologica", sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+p,
+a,
+label {
+  font-family: "Open Sans", sans-serif;
+  text-decoration: none !important;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+}
+.auth {
+  width: 100%;
+  height: 100vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.not__auth {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
 }
-
-.card {
-  padding: 2em;
+.not__auth h2 {
+  font-size: 100px;
+  margin-bottom: 2rem;
 }
-
-.read-the-docs {
-  color: #888;
+.not__auth p {
+  font-size: 25px;
 }
