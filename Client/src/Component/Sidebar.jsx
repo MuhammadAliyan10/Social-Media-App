@@ -1,27 +1,7 @@
 import React from "react";
 import "../assets/Css/Sidebar.css";
 import { Link } from "react-router-dom";
-const Navbar = () => {
-  return (
-    <div className="header">
-      <Sidebar />
-      <div className="navbar">
-        <div className="input__search">
-          <input
-            type="text"
-            className="form-control search-menu"
-            placeholder="Search..."
-          />
-          <div className="input-group-append">
-            <button className="input__button__search">
-              <i className="fa fa-search" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+
 const Sidebar = () => {
   return (
     <>
@@ -66,7 +46,7 @@ const Sidebar = () => {
                   </li>
                   <li className="sidebar-dropdown">
                     <Link to="/">
-                      <i class="fa-solid fa-house"></i>
+                      <i className="fa-solid fa-house"></i>
                       <span>Home</span>
                       <span className="badge badge-pill badge-warning">
                         New
@@ -75,14 +55,14 @@ const Sidebar = () => {
                   </li>
                   <li className="sidebar-dropdown">
                     <Link to="/posts">
-                      <i class="fa-solid fa-signs-post"></i>
+                      <i className="fa-solid fa-signs-post"></i>
                       <span>Posts</span>
                       <span className="badge badge-pill badge-danger">3</span>
                     </Link>
                   </li>
                   <li className="sidebar-dropdown">
                     <Link to="/posts">
-                      <i class="fa-solid fa-signs-post"></i>
+                      <i className="fa-solid fa-signs-post"></i>
                       <span>You</span>
                       <span className="badge badge-pill badge-danger">3</span>
                     </Link>
@@ -93,7 +73,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa-solid fa-address-card"></i>
+                      <i className="fa-solid fa-address-card"></i>
                       <span>About</span>
                       <span className="badge badge-pill badge-primary">
                         Beta
@@ -102,13 +82,13 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa-solid fa-address-book"></i>
+                      <i className="fa-solid fa-address-book"></i>
                       <span>Contact</span>
                     </a>
                   </li>
                   <li>
                     <a href="#">
-                      <i class="fa-solid fa-circle-info"></i>
+                      <i className="fa-solid fa-circle-info"></i>
                       <span>Help</span>
                     </a>
                   </li>
@@ -140,4 +120,4 @@ const Sidebar = () => {
   );
 };
 
-export default Navbar;
+export default Sidebar;

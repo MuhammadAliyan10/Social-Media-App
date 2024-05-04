@@ -8,14 +8,14 @@ import "./App.css";
 import Home from "./Pages/Home";
 import Posts from "./Pages/Posts";
 import { useUserContext } from "./Context/UserContext";
-import Navbar from "./Component/Navbar";
+import Sidebar from "./Component/Sidebar";
 
 function App() {
   const { isLogIn } = useUserContext();
 
   return (
     <BrowserRouter>
-      {isLogIn ? <Navbar /> : null}
+      {isLogIn ? <Sidebar /> : null}
       <Routes>
         {!isLogIn ? (
           <>
@@ -35,5 +35,4 @@ function App() {
   );
 }
 
-export default App;
 export default App;

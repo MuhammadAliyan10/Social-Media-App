@@ -3,13 +3,13 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
+const auth = require("../Middleware/auth");
 require("dotenv").config();
 
 //! For user register
 
 router.post("/register", async (req, res) => {
   try {
-    console.log(res.body);
     const checkExistingUser = await User.findOne({
       $or: [{ username: req.body.username }, { email: req.body.email }],
     });
@@ -58,3 +58,18 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+
+//Get User
+
+router.get("/userInfo", auth, async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});

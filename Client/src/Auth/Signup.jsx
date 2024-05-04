@@ -37,7 +37,7 @@ const Signup = () => {
   };
   return (
     <div className="auth">
-      <div className="container">
+      <div className="container-fluid">
         <div className="row d-flex justify-content-center">
           <div className="col-md-6 col-lg-4">
             <div className="box p-5">

@@ -468,26 +468,3 @@ body {
   width: 100%;
   display: flex;
 }
-
-.navbar {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  background-color: #31353d; /* Same background color as Sidebar */
-  padding: 10px;
-  height: 60px;
-  width: 100%;
-}
-.input__search {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.input__search input {
-  padding: 4px 14px;
-  border: 1px solid transparent;
-  margin: 0;
-}
-.input__button__search {
-  padding: 10px 10px;
-}

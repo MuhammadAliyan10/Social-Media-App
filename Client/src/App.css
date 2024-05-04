@@ -42,3 +42,11 @@ body {
 .not__auth p {
   font-size: 25px;
 }
+.container {
+  padding-left: 18rem;
+  padding-top: 4rem;
+}
+
+#root {
+  display: flex;
+}
