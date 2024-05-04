@@ -9,6 +9,9 @@ import Home from "./Pages/Home";
 import Posts from "./Pages/Posts";
 import { useUserContext } from "./Context/UserContext";
 import Sidebar from "./Component/Sidebar";
+import Profile from "./Pages/Profile";
+import FindUser from "./Pages/FindUser";
+import SingleUserProfile from "./Pages/SingleUserProfile";
 
 function App() {
   const { isLogIn } = useUserContext();
@@ -28,6 +31,12 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/findUsers" element={<FindUser />} />
+            <Route
+              path="/singleUserProfile/:id"
+              element={<SingleUserProfile />}
+            />
           </>
         )}
       </Routes>

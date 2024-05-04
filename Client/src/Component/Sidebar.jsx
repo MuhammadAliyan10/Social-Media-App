@@ -61,9 +61,16 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li className="sidebar-dropdown">
-                    <Link to="/posts">
-                      <i className="fa-solid fa-signs-post"></i>
-                      <span>You</span>
+                    <Link to="/findUsers">
+                      <i className="fa-solid fa-magnifying-glass"></i>
+                      <span>Find Friends</span>
+                      <span className="badge badge-pill badge-danger">3</span>
+                    </Link>
+                  </li>
+                  <li className="sidebar-dropdown">
+                    <Link to="/profile">
+                      <i className="fa-regular fa-user"></i>
+                      <span>Profile</span>
                       <span className="badge badge-pill badge-danger">3</span>
                     </Link>
                   </li>
