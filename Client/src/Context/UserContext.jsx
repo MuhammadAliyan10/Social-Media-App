@@ -8,25 +8,25 @@ export const useUserContext = () => {
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  // useEffect(() => {
-  //   const fetchUserInfo = async () => {
-  //     const api = "http://localhost:3000/user/userInfo";
-  //     const token = localStorage.getItem("token");
-  //     try {
-  //       const response = await fetch(api, {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       const resData = await response.json();
-  //       setUser(resData);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchUserInfo();
-  // }, []);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const api = "http://localhost:3000/user/userInfo";
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(api, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const resData = await response.json();
+        setUser(resData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
   const [isLogIn, setIsLogIn] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");

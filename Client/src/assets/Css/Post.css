@@ -1,12 +1,19 @@
-.home .all__posts__box {
+.posts .add_post {
+  margin: 4rem;
+}
+.posts .recent__posts {
+  margin: 4rem 0rem;
+}
+.posts .recent__posts .button-36 {
   margin-left: 4rem;
+  margin-top: 3rem;
+}
+
+.posts .single__post__box {
   width: 100%;
-  padding: 4rem;
+  padding: 0rem 0rem 2rem 4rem;
 }
-.home .single__post__box {
-  margin: 2rem 0rem;
-}
-.reviews ul {
+.posts .reviews ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -14,7 +21,7 @@
   justify-content: space-around;
   align-items: center;
 }
-.reviews ul li a i {
+.posts .reviews ul li a i {
   font-size: 20px;
   color: #31353d;
   transition: 0.3s;
@@ -23,25 +30,29 @@
   }
 }
 
-.line {
+.posts .line {
   background-color: red;
   width: 100%;
   height: 1px;
   margin: 3rem 0rem;
 }
-.user {
+.posts .user {
   display: flex;
   justify-content: start;
 }
-.user__image img {
+.posts .user__image img {
   width: 50px;
   height: 50px;
   margin-right: 1rem;
   border-radius: 50%;
 }
-.user__info h3 {
+.posts .user__info h3 {
   margin-bottom: 5px;
   font-size: 16px;
+}
+
+.posts {
+  position: relative;
 }
 .post {
   margin: 2rem 0rem;
@@ -49,6 +60,7 @@
 .post p {
   font-size: 16px;
   margin: 0;
+  margin-bottom: 1rem;
 }
 .top__info {
   display: flex;
@@ -78,7 +90,37 @@
   color: #13c7ff;
 }
 
-.post__image {
+.post__box{
+  position: absolute;
+  top: 20%;
+  left: 90%;
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+  background-color: #fff;
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5); /
+}
+.post__box textarea{
+  width: 100%;
+  outline: none;
+  font-size: 15px;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 1rem;
+}
+.submit__button{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin: 1rem 0rem;
+}
+.submit__button .button-36{
+padding: 10px 20px;
+}
+
+.post__image{
   width: 100%;
   height: 50vh;
   background-size: cover;

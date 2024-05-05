@@ -93,17 +93,24 @@ const SingleUserProfile = () => {
       <div className="container">
         <div className="row m-b-r m-t-3">
           <div className="col-sm-12">
-            <div className="coverImage">
-              {userData?.profile?.coverImage ? (
-                ""
-              ) : (
-                <img src={coverImage} alt="" />
-              )}
-            </div>
+            <div
+              className="coverImage"
+              style={{
+                backgroundImage: `url(${
+                  userData?.profile?.coverImage
+                    ? userData?.profile.coverImage
+                    : coverImage
+                })`,
+              }}
+            ></div>
           </div>
           <div className="col-md-2">
             {userData.profile?.avatar ? (
-              " "
+              <img
+                src={userData.profile?.avatar}
+                alt=""
+                className="img-circle img-fluid"
+              />
             ) : (
               <img src={userImg} alt="" className="img-circle img-fluid" />
             )}
@@ -150,13 +157,6 @@ const SingleUserProfile = () => {
               </li>
             </ul>
           </div>
-          {userData._id == user._id && (
-            <div className="col-sm-1">
-              <button className="button-36 ms-5" role="button">
-                Edit
-              </button>
-            </div>
-          )}
         </div>
         <div className="additional__info"></div>
       </div>

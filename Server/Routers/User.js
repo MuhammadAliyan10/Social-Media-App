@@ -175,3 +175,46 @@ router.get("/findUser/:userName", auth, async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 });
+
+//! Update Userinfo
+
+router.put("/userUpdate", auth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (req.body.username) {
+      user.username = req.body.username;
+    }
+    if (req.body.fullName) {
+      user.profile.fullName = req.body.fullName;
+    }
+    if (req.body.email) {
+      user.email = req.body.email;
+    }
+
+    if (req.body.bio !== undefined) {
+      user.profile.bio = req.body.bio;
+    }
+    if (
+      req.body.coverImage !== undefined &&
+      Object.keys(req.body.coverImage).length !== 0
+    ) {
+      user.profile.coverImage = req.body.coverImage;
+    }
+    if (
+      req.body.avatar !== undefined &&
+      Object.keys(req.body.avatar).length !== 0
+    ) {
+      user.profile.avatar = req.body.avatar;
+    }
+
+    await user.save();
+    return res.status(200).json({ message: "User updated successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});

@@ -1,8 +1,16 @@
 import React from "react";
 import "../assets/Css/Sidebar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../Context/UserContext";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const { setIsLogIn } = useUserContext();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLogIn(false);
+    navigate("/login");
+  };
   return (
     <>
       <div className="Sidebar">
@@ -48,9 +56,6 @@ const Sidebar = () => {
                     <Link to="/">
                       <i className="fa-solid fa-house"></i>
                       <span>Home</span>
-                      <span className="badge badge-pill badge-warning">
-                        New
-                      </span>
                     </Link>
                   </li>
                   <li className="sidebar-dropdown">
@@ -64,14 +69,12 @@ const Sidebar = () => {
                     <Link to="/findUsers">
                       <i className="fa-solid fa-magnifying-glass"></i>
                       <span>Find Friends</span>
-                      <span className="badge badge-pill badge-danger">3</span>
                     </Link>
                   </li>
                   <li className="sidebar-dropdown">
                     <Link to="/profile">
                       <i className="fa-regular fa-user"></i>
                       <span>Profile</span>
-                      <span className="badge badge-pill badge-danger">3</span>
                     </Link>
                   </li>
 
@@ -116,7 +119,7 @@ const Sidebar = () => {
                   7
                 </span>
               </a>
-              <a href="#">
+              <a onClick={handleLogout}>
                 <i className="fa fa-power-off"></i>
               </a>
             </div>

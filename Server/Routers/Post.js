@@ -6,6 +6,10 @@ const auth = require("../Middleware/auth.js");
 
 router.post("/", auth, async (req, res) => {
   try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const { content, image } = req.body;
     const newPost = new Post({
       user: req.user.id,
@@ -103,6 +107,28 @@ router.patch("/updatePost/:postId", auth, async (req, res) => {
     await post.save();
 
     res.status(200).send(post);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
+  }
+});
+
+//! Fetch singlePerson posts
+
+router.get("/userPosts/:id", auth, async (req, res) => {
+  try {
+    const logInUser = await User.findById(req.user._id);
+    if (!logInUser) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    const userPosts = req.params.id;
+    console.log(userPosts);
+    const posts = await Post.find({ user: userPosts });
+    if (!posts) {
+      return res.status(404).send({ message: "Post not found" });
+    }
+    res.json(posts);
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Server error" });

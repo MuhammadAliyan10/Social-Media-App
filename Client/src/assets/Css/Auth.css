@@ -81,6 +81,9 @@
   align-items: center;
   color: #fff;
 }
+.go__to {
+  text-align: center;
+}
 .go__to p {
   color: #fff;
   font-size: 17px;
@@ -92,4 +95,10 @@
 .errors p {
   color: red;
   font-size: 13px;
+}
+.auth input[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  margin: 0px 7px 0px 0px;
+  outline: none;
 }

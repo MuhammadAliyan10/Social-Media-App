@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/Css/FindUser.css";
 import userImg from "../assets/Images/user.jpeg";
 import { Link } from "react-router-dom";
@@ -9,7 +9,26 @@ const FindUser = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { user } = useUserContext();
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const api = "http://localhost:3000/user/userInfo";
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(api, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const resData = await response.json();
+        setUser(resData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   async function searchUser(username) {
     setUserName(username);

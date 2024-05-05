@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -6,6 +6,7 @@ import { useUserContext } from "../Context/UserContext";
 
 const Login = () => {
   const { setIsLogIn } = useUserContext();
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -13,6 +14,10 @@ const Login = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
+  const handleCheckboxChange = (event) => {
+    setRememberMe(event.target.checked);
+  };
+
   const onSubmit = async (data) => {
     const api = "http://localhost:3000/user/login";
     try {
@@ -36,6 +41,11 @@ const Login = () => {
         throw new Error("Token not found in response");
       }
       localStorage.setItem("token", token);
+      if (!rememberMe) {
+        setTimeout(() => {
+          localStorage.removeItem("token");
+        }, 24 * 60 * 60 * 1000);
+      }
       setIsLogIn(true);
       reset();
       navigate("/");
@@ -70,6 +80,7 @@ const Login = () => {
                   })}
                   placeholder="Password"
                   autoComplete="off"
+                  type="password"
                 />
                 {errors.password && (
                   <div className="errors">
@@ -80,9 +91,19 @@ const Login = () => {
                   Log In
                 </button>
               </form>
-              <div className="additional__info">
-                <p>Remember Me</p>
-                <p>Forget Password</p>
+              <div className="additional__info mb-3 mt-1">
+                <div className="remember__me d-flex align-items-center justify-content-center">
+                  <input
+                    type="checkbox"
+                    value={rememberMe}
+                    onChange={handleCheckboxChange}
+                  />
+                  <p className="m-0">Remember Me</p>
+                </div>
+                <div className="forget__password d-flex align-items-center justify-content-center">
+                  <i className="fa-solid fa-key me-2"></i>
+                  <p className="m-0"> Forget Password</p>
+                </div>
               </div>
               <div className="go__to">
                 <p>
