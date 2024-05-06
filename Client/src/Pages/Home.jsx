@@ -5,6 +5,10 @@ import userImg from "../assets/Images/user.jpeg";
 const Home = () => {
   const [post, setPosts] = useState([]);
   const [fetchPost, setFetchPost] = useState(false);
+  const [commentBox, setCommentBox] = useState(false);
+  const [postComments, setPostComments] = useState([]);
+
+  const [comment, setComment] = useState({ content: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState([]);
   useEffect(() => {
@@ -108,6 +112,51 @@ const Home = () => {
         console.log(resData);
       }
       setFetchPost(!fetchPost);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleComment = async (id) => {
+    setCommentBox(!commentBox);
+    const api = `http://localhost:3000/post/comment/${id}`;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(api, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(comment),
+      });
+      if (!response.ok) {
+        const dataRes = await response.json();
+        return console.log(dataRes.message);
+      }
+      setFetchPost(!fetchPost);
+      setComment({ content: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchComments = async (id) => {
+    setCommentBox(!commentBox);
+    const api = `http://localhost:3000/post/postComment/${id}`;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(api, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const dataRes = await response.json();
+        return console.log(dataRes.message);
+      }
+      const dataRes = await response.json();
+      setPostComments(dataRes.comments);
     } catch (error) {
       console.error(error);
     }
@@ -234,13 +283,52 @@ const Home = () => {
                           </a>
                         )}
                       </li>
-                      <li>
-                        <a href="">
+                      <li className="comment__icon">
+                        {p?.comments.length > 0 && (
+                          <div className="comment__len">
+                            <span>{p?.comments.length}</span>
+                          </div>
+                        )}
+                        <a onClick={() => fetchComments(p._id)}>
                           <i className="fa-regular fa-comment"></i>
                         </a>
                       </li>
                     </ul>
                   </div>
+                  {commentBox && (
+                    <div className="comment__box">
+                      {postComments.slice(0, 6).map((comment) => {
+                        return (
+                          <div className="comment" key={comment._id}>
+                            <div className="single__comment">
+                              <div className="comment__admin__img"></div>
+                              <div className="comment__info">
+                                <p>{comment?.content}</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <input
+                        type="text"
+                        name="content"
+                        autoComplete="off"
+                        value={comment.content}
+                        onChange={(e) =>
+                          setComment({
+                            ...comment,
+                            [e.target.name]: e.target.value,
+                          })
+                        }
+                      />
+                      <div className="comment__btn">
+                        <button onClick={() => handleComment(p._id)}>
+                          Submit
+                        </button>
+                        <button>Close</button>
+                      </div>
+                    </div>
+                  )}
                   {index < post?.length - 1 && <div className="line"></div>}
                 </div>
               );

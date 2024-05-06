@@ -17,6 +17,8 @@ router.post("/", auth, async (req, res) => {
       image: image,
     });
     const post = await newPost.save();
+    user.posts.push(post);
+    await user.save();
     res.json(post);
   } catch (error) {
     console.log(error.message);
@@ -123,12 +125,61 @@ router.get("/userPosts/:id", auth, async (req, res) => {
     }
 
     const userPosts = req.params.id;
-    console.log(userPosts);
     const posts = await Post.find({ user: userPosts });
     if (!posts) {
       return res.status(404).send({ message: "Post not found" });
     }
     res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
+  }
+});
+
+//! Add a comment
+
+router.post("/comment/:postId", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const postID = req.params.postId;
+    const post = await Post.findById(postID);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    const comment = {
+      user: req.user,
+      content: req.body.content,
+    };
+    post.comments.push(comment);
+    await post.save();
+    return res.status(200).json({ message: "Comment posted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
+  }
+});
+router.get("/postComment/:postId", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const postID = req.params.postId;
+    const post = await Post.findById(postID);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    if (post.comments < 0) {
+      return res
+        .status(200)
+        .json({ message: "No comments. You are the first one to comment." });
+    }
+    const comments = post.comments;
+    res.json({ comments: comments });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Server error" });

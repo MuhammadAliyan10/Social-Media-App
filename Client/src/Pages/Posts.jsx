@@ -164,7 +164,7 @@ const Posts = () => {
           </button>
         </div>
         {showBox && (
-          <div className="post__box">
+          <div className="post__box__posts">
             <h4 className="text-center my-3">New Post</h4>
             <form onSubmit={handlePost}>
               <textarea
@@ -173,11 +173,7 @@ const Posts = () => {
                 value={data.content}
                 onChange={handleContentChange}
               />
-              <input
-                type="file"
-                name="image" // Set name attribute for file input
-                onChange={handleImageChange}
-              />
+              <input type="file" name="image" onChange={handleImageChange} />
               <div className="submit__button">
                 <button type="submit" className="button-36 ms-1" role="button">
                   Post
@@ -267,13 +263,13 @@ const Posts = () => {
                               </a>
                             </li>
                             <li>
-                              <a
+                              <button
                                 className="dropdown-item"
                                 onClick={() => handleDeletePost(p._id)}
                               >
                                 <i className="fa-solid fa-trash"></i>
                                 <p>Delete</p>
-                              </a>
+                              </button>
                             </li>
                             <li>
                               <a className="dropdown-item" href="#">
