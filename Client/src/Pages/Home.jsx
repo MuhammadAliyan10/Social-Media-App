@@ -117,7 +117,7 @@ const Home = () => {
     }
   };
   const handleComment = async (id) => {
-    setCommentBox(!commentBox);
+    setCommentBox(true);
     const api = `http://localhost:3000/post/comment/${id}`;
     const token = localStorage.getItem("token");
     try {
@@ -325,7 +325,9 @@ const Home = () => {
                         <button onClick={() => handleComment(p._id)}>
                           Submit
                         </button>
-                        <button>Close</button>
+                        <button onClick={() => setCommentBox(false)}>
+                          Close
+                        </button>
                       </div>
                     </div>
                   )}

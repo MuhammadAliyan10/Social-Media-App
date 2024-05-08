@@ -2,6 +2,8 @@ import React from "react";
 import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -21,10 +23,13 @@ const Signup = () => {
         },
         body: JSON.stringify(data),
       });
-      const resData = await response.json();
+
       if (!response.ok) {
-        return console.log(resData);
+        const errData = await response.json();
+        return toast(errData.message);
       }
+      const resData = await response.json();
+      toast(resData.message);
       reset();
       navigate("/login");
     } catch (error) {
@@ -37,6 +42,7 @@ const Signup = () => {
   };
   return (
     <div className="auth">
+      <ToastContainer />
       <div className="container-fluid">
         <div className="row d-flex justify-content-center">
           <div className="col-md-6 col-lg-4">

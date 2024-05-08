@@ -3,7 +3,8 @@ import "../assets/Css/Profile.css";
 import userImg from "../assets/Images/user.jpeg";
 import coverImage from "../assets/Images/cover.jpeg";
 import { useForm } from "react-hook-form";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Profile = () => {
   const [user, setUser] = useState([]);
   const [dataUpdated, setIsDataUpdated] = useState(false);
@@ -53,7 +54,7 @@ const Profile = () => {
   const onSubmit = async (data) => {
     try {
       if (!data) {
-        return console.log("No new data");
+        return toast("Please provide new data.");
       }
       if (data.avatar.length > 0) {
         data.avatar = await convertToDatabase64(data.avatar[0]);
@@ -73,10 +74,10 @@ const Profile = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update user");
+        return toast(errorData.message);
       }
       const resData = await response.json();
-      console.log(resData);
+      toast(resData.message);
       reset();
       setIsDataUpdated(!dataUpdated);
       setShowBox(false);
@@ -85,13 +86,9 @@ const Profile = () => {
     }
   };
 
-  const validateEmail = (value) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(value) || "Invalid email";
-  };
-
   return (
     <div className="profile">
+      <ToastContainer />
       <div className="container">
         {showBox && (
           <div className="edit__box">

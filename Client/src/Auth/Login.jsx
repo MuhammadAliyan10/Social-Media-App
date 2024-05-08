@@ -3,6 +3,8 @@ import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useUserContext } from "../Context/UserContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const { setIsLogIn } = useUserContext();
@@ -31,7 +33,7 @@ const Login = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        return toast(errorData.message);
       }
 
       const resData = await response.json();
@@ -55,6 +57,7 @@ const Login = () => {
   };
   return (
     <div className="auth">
+      <ToastContainer />
       <div className="container-fluid">
         <div className="row d-flex justify-content-center">
           <div className="col-md-6 col-lg-4">

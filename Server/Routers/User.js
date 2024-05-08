@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
       profile: { fullName: req.body.fullName },
     });
     await newUser.save();
-    res.status(200).json({ message: "New user added successfully." });
+    res.status(200).json({ message: "Account created successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -39,14 +39,14 @@ router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     const passwordMatch = await bcrypt.compare(
       req.body.password,
       user.password
     );
     if (!passwordMatch) {
-      res.status(401).json({ message: "Invalid Password." });
+      return res.status(401).json({ message: "Invalid Password." });
     }
     //! Generate JWT token
     const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET);
@@ -211,7 +211,7 @@ router.put("/userUpdate", auth, async (req, res) => {
     }
 
     await user.save();
-    return res.status(200).json({ message: "User updated successfully." });
+    return res.status(200).json({ message: "Profile updated successfully." });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
