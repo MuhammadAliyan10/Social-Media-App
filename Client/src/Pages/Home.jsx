@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../assets/Css/Home.css";
 import { Link } from "react-router-dom";
 import userImg from "../assets/Images/user.jpeg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Home = () => {
   const [post, setPosts] = useState([]);
   const [fetchPost, setFetchPost] = useState(false);
-  const [commentBox, setCommentBox] = useState(false);
-  const [postComments, setPostComments] = useState([]);
-
+  const [commentBox, setCommentBox] = useState({});
+  const [postComments, setPostComments] = useState({});
   const [comment, setComment] = useState({ content: "" });
-  const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState([]);
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -54,7 +54,7 @@ const Home = () => {
   }, [fetchPost]);
   const isAdminForPost = (postId) => {
     const postCreator = post.find((p) => p._id === postId);
-    return postCreator === user._id;
+    return postCreator.user._id === user._id;
   };
 
   const handleLikePost = async (postId) => {
@@ -107,17 +107,43 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const resData = await response.json();
       if (!response.ok) {
-        console.log(resData);
+        const errData = await response.json();
+        return target(errData.message);
       }
+      const resData = await response.json();
+      toast(resData.message);
       setFetchPost(!fetchPost);
     } catch (error) {
       console.error(error);
     }
   };
-  const handleComment = async (id) => {
-    setCommentBox(true);
+
+  const fetchComments = async (postId) => {
+    const api = `http://localhost:3000/post/postComment/${postId}`;
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(api, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const dataRes = await response.json();
+        console.log(dataRes.message);
+        return;
+      }
+      const dataRes = await response.json();
+      setPostComments((prevComments) => ({
+        ...prevComments,
+        [postId]: dataRes.comments,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleComment = async (id, comment) => {
     const api = `http://localhost:3000/post/comment/${id}`;
     const token = localStorage.getItem("token");
     try {
@@ -133,6 +159,7 @@ const Home = () => {
         const dataRes = await response.json();
         return console.log(dataRes.message);
       }
+      fetchComments(id);
       setFetchPost(!fetchPost);
       setComment({ content: "" });
     } catch (error) {
@@ -140,23 +167,31 @@ const Home = () => {
     }
   };
 
-  const fetchComments = async (id) => {
-    setCommentBox(!commentBox);
-    const api = `http://localhost:3000/post/postComment/${id}`;
+  const toggleCommentBox = (postId) => {
+    setCommentBox((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
+  };
+
+  const handleCommentDelete = async (postId, commentId) => {
+    const api = `http://localhost:3000/post/deleteComment/${postId}/${commentId}`;
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(api, {
-        method: "GET",
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (!response.ok) {
-        const dataRes = await response.json();
-        return console.log(dataRes.message);
+        const errData = await response.json();
+        return toast(errData.message);
       }
-      const dataRes = await response.json();
-      setPostComments(dataRes.comments);
+      const resData = await response.json();
+      fetchComments(postId);
+      toast(resData.message);
+      setFetchPost(!fetchPost);
     } catch (error) {
       console.error(error);
     }
@@ -164,6 +199,7 @@ const Home = () => {
 
   return (
     <div className="home">
+      <ToastContainer />
       <div className="container">
         <h2>Home</h2>
         <div className="all__posts__box">
@@ -172,7 +208,6 @@ const Home = () => {
               function getTimeAgo(timestamp) {
                 const currentDate = new Date();
                 const providedDate = new Date(timestamp);
-
                 const timeDifference =
                   currentDate.getTime() - providedDate.getTime();
                 const secondsDifference = Math.floor(timeDifference / 1000);
@@ -244,12 +279,6 @@ const Home = () => {
                                 <p>Delete</p>
                               </a>
                             </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                <i className="fa-solid fa-circle-info"></i>
-                                <p>Info</p>
-                              </a>
-                            </li>
                           </ul>
                         </div>
                       </div>
@@ -289,43 +318,86 @@ const Home = () => {
                             <span>{p?.comments.length}</span>
                           </div>
                         )}
-                        <a onClick={() => fetchComments(p._id)}>
+                        <a
+                          onClick={() => {
+                            fetchComments(p._id);
+                            toggleCommentBox(p._id);
+                          }}
+                        >
                           <i className="fa-regular fa-comment"></i>
                         </a>
                       </li>
                     </ul>
                   </div>
-                  {commentBox && (
+                  {commentBox[p._id] && (
                     <div className="comment__box">
-                      {postComments.slice(0, 6).map((comment) => {
-                        return (
-                          <div className="comment" key={comment._id}>
-                            <div className="single__comment">
-                              <div className="comment__admin__img"></div>
-                              <div className="comment__info">
-                                <p>{comment?.content}</p>
+                      {postComments[p._id] ? (
+                        postComments[p._id].map((comment) => {
+                          return (
+                            <div className="comment" key={comment._id}>
+                              <div className="single__comment">
+                                <div className="comment__admin__img">
+                                  <Link
+                                    to={`/singleUserProfile/${comment?.user?._id}`}
+                                  >
+                                    <img src={comment?.user?.avatar} alt="" />
+                                  </Link>{" "}
+                                </div>
+                                <div className="comment__info">
+                                  <Link
+                                    to={`/singleUserProfile/${comment?.user?._id}`}
+                                  >
+                                    <h5>{comment?.user?.username}</h5>
+                                  </Link>
+                                  <p>{comment?.content}</p>
+                                </div>
+                                {comment?.user?._id === user._id && (
+                                  <div className="remove__comment">
+                                    <i
+                                      onClick={() =>
+                                        handleCommentDelete(p?._id, comment._id)
+                                      }
+                                      className="fa-solid fa-trash"
+                                    ></i>
+                                  </div>
+                                )}
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })
+                      ) : (
+                        <p className="text-center my-4">
+                          No comment, You are the first one to comment.
+                        </p>
+                      )}
                       <input
                         type="text"
                         name="content"
                         autoComplete="off"
-                        value={comment.content}
+                        value={comment[p._id]?.content || ""}
                         onChange={(e) =>
                           setComment({
                             ...comment,
-                            [e.target.name]: e.target.value,
+                            [p._id]: {
+                              ...comment[p._id],
+                              [e.target.name]: e.target.value,
+                            },
                           })
                         }
                       />
                       <div className="comment__btn">
-                        <button onClick={() => handleComment(p._id)}>
+                        <button
+                          onClick={() =>
+                            handleComment(p._id, comment[p._id] || {})
+                          }
+                        >
                           Submit
                         </button>
-                        <button onClick={() => setCommentBox(false)}>
+                        <button
+                          onClick={() =>
+                            setCommentBox({ ...commentBox, [p._id]: false })
+                          }
+                        >
                           Close
                         </button>
                       </div>

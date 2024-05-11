@@ -78,7 +78,7 @@ router.delete("/deletePost/:id", auth, async (req, res) => {
       return res.status(401).json({ message: "User not authorized" });
     }
     await post.deleteOne();
-    res.json({ msg: "Post removed" });
+    res.json({ message: "Post removed successfully." });
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
@@ -162,6 +162,8 @@ router.post("/comment/:postId", auth, async (req, res) => {
     res.status(500).send({ error: "Server error" });
   }
 });
+
+//! Get comments
 router.get("/postComment/:postId", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -173,13 +175,72 @@ router.get("/postComment/:postId", auth, async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    if (post.comments < 0) {
+    if (post.comments.length === 0) {
       return res
         .status(200)
         .json({ message: "No comments. You are the first one to comment." });
     }
-    const comments = post.comments;
-    res.json({ comments: comments });
+
+    const populatedComments = await Promise.all(
+      post.comments.map(async (comment) => {
+        const commentUser = await User.findById(comment.user);
+        return {
+          ...comment.toObject(),
+          user: commentUser
+            ? {
+                _id: commentUser._id,
+                username: commentUser.username,
+                avatar: commentUser.profile.avatar,
+              }
+            : null,
+        };
+      })
+    );
+
+    res.json({ comments: populatedComments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Server error" });
+  }
+});
+
+router.delete("/deleteComment/:postId/:commentId", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const postId = req.params.postId;
+    if (!postId) {
+      return res.status(400).json({ message: "postId parameter is missing" });
+    }
+
+    const commentId = req.params.commentId;
+    if (!commentId) {
+      return res
+        .status(400)
+        .json({ message: "commentId parameter is missing" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const commentIndex = post.comments.findIndex(
+      (comment) => comment["_id"].toString() === commentId
+    );
+
+    if (commentIndex === -1) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    post.comments.splice(commentIndex, 1);
+
+    await post.save();
+
+    res.status(200).json({ message: "Comment deleted successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: "Server error" });

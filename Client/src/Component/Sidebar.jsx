@@ -77,31 +77,6 @@ const Sidebar = () => {
                       <span>Profile</span>
                     </Link>
                   </li>
-
-                  <li className="header-menu">
-                    <span>Extra</span>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa-solid fa-address-card"></i>
-                      <span>About</span>
-                      <span className="badge badge-pill badge-primary">
-                        Beta
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa-solid fa-address-book"></i>
-                      <span>Contact</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa-solid fa-circle-info"></i>
-                      <span>Help</span>
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
